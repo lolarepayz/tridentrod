@@ -1,0 +1,87 @@
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 200, 0, 150)
+mainFrame.Position = UDim2.new(0.5, -100, 0.5, -75)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+mainFrame.Active = true
+mainFrame.Draggable = true -- Make the GUI movable
+
+-- Create Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -30, 0, 50)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "TRIDENT ROD"
+titleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+titleLabel.TextSize = 24
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.Parent = mainFrame
+
+-- Create Minimize Button
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 30, 0, 30)
+minimizeButton.Position = UDim2.new(1, -30, 0, 10)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.TextSize = 18
+minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.Parent = mainFrame
+
+-- Create Teleport Button
+local teleportButton = Instance.new("TextButton")
+teleportButton.Size = UDim2.new(1, -20, 0, 50)
+teleportButton.Position = UDim2.new(0, 10, 0, 70)
+teleportButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+teleportButton.TextColor3 = Color3.fromRGB(255, 215, 0)
+teleportButton.TextSize = 20
+teleportButton.Font = Enum.Font.SourceSansBold
+teleportButton.Text = "TELEPORT"
+teleportButton.Parent = mainFrame
+
+-- Teleport function
+local function teleportToPosition()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    
+    local targetCFrame = CFrame.new(
+        -1484.22913, -225.779587, -2203.47925,  -- Position
+        -0.992329299, 9.47357677e-08, -0.123622462,
+        9.87850015e-08, 1, -2.66253153e-08,
+        0.123622462, -3.86331251e-08, -0.992329299
+    )
+    
+    if character then
+        local rootPart = character:FindFirstChild("HumanoidRootPart")
+        if rootPart then
+            rootPart.CFrame = targetCFrame
+            print("Teleported to the specified position!")
+        else
+            print("HumanoidRootPart not found!")
+        end
+    else
+        print("Character not loaded!")
+    end
+end
+
+-- Connect button to teleport function
+teleportButton.MouseButton1Click:Connect(teleportToPosition)
+
+-- Minimize functionality
+local minimized = false
+minimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    if minimized then
+        mainFrame.Size = UDim2.new(0, 200, 0, 50)
+        teleportButton.Visible = false
+    else
+        mainFrame.Size = UDim2.new(0, 200, 0, 150)
+        teleportButton.Visible = true
+    end
+end)
